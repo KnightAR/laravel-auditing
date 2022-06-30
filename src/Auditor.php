@@ -72,7 +72,7 @@ class Auditor extends Manager implements Contracts\Auditor
             if (
                 empty($model->toAudit()['new_values']) &&
                 empty($model->toAudit()['old_values']) &&
-                !in_array($model->getAuditEvent(), Config::get('audit.allowed_empty_values'))
+                !in_array($model->getAuditEvent(), Config::get('audit.allowed_empty_values') ?? [])
             ) {
                 return;
             }
