@@ -2,6 +2,7 @@
 
 namespace OwenIt\Auditing;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Manager;
 use InvalidArgumentException;
 use OwenIt\Auditing\Contracts\Auditable;
