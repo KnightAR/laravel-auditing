@@ -66,6 +66,25 @@ class Auditor extends Manager implements Contracts\Auditor
             return;
         }
 
+        // If we want to avoid storing Audits with empty old_values & new_values, return null here.
+        if (!Config::get('audit.empty_values')) {
+            if (
+                empty($model->toAudit()['new_values']) &&
+                empty($model->toAudit()['old_values']) &&
+                !in_array($model->getAuditEvent(), Config::get('audit.allowed_empty_values'))
+            ) {
+                return;
+            }
+        }
+
+        //Don't store audits if there are no changes, expect for 'retrieved' events
+        if (
+            $model->toAudit()['new_values'] == $model->toAudit()['old_values'] &&
+            !in_array($model->getAuditEvent(), ['retrieved'])
+        ) {
+            return;
+        }
+
         if ($audit = $driver->audit($model)) {
             $driver->prune($model);
         }
